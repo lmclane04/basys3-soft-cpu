@@ -1,0 +1,29 @@
+# Vivado project files to ignore
+
+# Common file types
+*.jou
+*.log
+*.str
+*.webtalk
+*.xpr
+*.xgui
+*.wcfg
+*.dmp
+*.backup
+*.xml
+
+# Auto-generated folders
+.cache/
+.hw/
+.runs/
+.sim/
+.ip_user_files/
+.xpr/
+.srcs/
+.vivado/
+vivado/*_tmp*/
+
+# OS or editor junk
+.DS_Store
+*.swp
+*.swo

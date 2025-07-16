@@ -1,0 +1,10 @@
+0.6
+2019.2
+Nov  6 2019
+21:42:20
+/home/users/lmclane/Desktop/cpu_project/cpu_project.sim/sim_1/behav/xsim/glbl.v,1573089660,verilog,,,,glbl,,,,,,,,
+/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sim_1/new/cpu_tb.v,1752479223,verilog,,,,cpu_tb,,,,,,,,
+/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sources_1/new/alu.v,1752479009,verilog,,/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sources_1/new/cpu.v,,alu,,,,,,,,
+/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sources_1/new/cpu.v,1752509367,verilog,,/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sources_1/new/regfile.v,,cpu,,,,,,,,
+/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sources_1/new/regfile.v,1752504999,verilog,,/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sources_1/new/rom.v,,regfile,,,,,,,,
+/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sources_1/new/rom.v,1752504853,verilog,,/home/users/lmclane/Desktop/cpu_project/cpu_project.srcs/sim_1/new/cpu_tb.v,,rom,,,,,,,,
