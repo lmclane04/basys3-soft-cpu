@@ -16,13 +16,13 @@ module cpu_tb;
         // Reset pulse
         #10 rst = 0;
 
-        // Run for enough cycles to test branching/jumping
-        #200;
+        // Wait for LOAD/STORE to complete
+        #50;
+        $display("[t=%0t] LED output after LOAD/STORE: %b", $time, out_led);
 
-        // Display the LED output
-        $display("LED output: %b", out_led);
-
-        // Optionally, add more checks here
+        // Wait more cycles to observe stability
+        #100;
+        $display("[t=%0t] LED output later: %b", $time, out_led);
 
         $finish;
     end

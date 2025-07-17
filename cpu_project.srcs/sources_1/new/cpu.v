@@ -15,6 +15,9 @@ module cpu(
     wire halt_out;
     wire is_jump;
     wire is_branch;
+    wire ram_write_en;
+    wire is_load;
+    wire is_store;
     reg [1:0] write_addr_reg;
     reg [7:0] alu_result_reg;
     reg halted = 0;
@@ -23,6 +26,9 @@ module cpu(
     wire [1:0] beq_r1 = instr[5:4];
     wire [1:0] beq_r2 = instr[3:2];
     wire [1:0] beq_offset = instr[1:0];
+    wire [1:0] mem_reg = instr[5:4];
+    wire [5:0] mem_addr = instr[3:0];
+    wire [7:0] ram_dout;
 
     rom imem(.addr(pc), .data(instr));
     regfile regs(
@@ -36,13 +42,23 @@ module cpu(
         .read_data2(rd2)
     );
     alu alu_inst(.a(rd1), .b(rd2), .op(opcode), .result(alu_result));
+    ram data_ram(
+        .clk(clk),
+        .we(ram_write_en),
+        .addr({2'b00, instr[5:0]}),
+        .din(rd1), // For STORE, write register value
+        .dout(ram_dout)
+    );
     control control_unit(
         .opcode(opcode),
         .rst(rst),
         .reg_write_en(reg_write_en),
+        .ram_write_en(ram_write_en),
         .halt_out(halt_out),
         .is_jump(is_jump),
-        .is_branch(is_branch)
+        .is_branch(is_branch),
+        .is_load(is_load),
+        .is_store(is_store)
     );
 
     always @(posedge clk) begin
@@ -50,8 +66,17 @@ module cpu(
             pc <= 0;
             halted <= 0;
         end else if (!halted) begin
-            alu_result_reg <= alu_result;
-            write_addr_reg <= dst;
+            if (is_load) begin
+                alu_result_reg <= ram_dout;
+                write_addr_reg <= instr[5:4];
+            end else if (is_store) begin
+                // STORE handled by RAM write
+                write_addr_reg <= 0;
+                alu_result_reg <= 0;
+            end else begin
+                alu_result_reg <= alu_result;
+                write_addr_reg <= dst;
+            end
             if (halt_out) begin
                 halted <= 1;
             end
