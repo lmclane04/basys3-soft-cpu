@@ -19,11 +19,11 @@ module cpu_tb;
         // Run for enough cycles to test branching/jumping
         #200;
 
-        // Check results (example: check out_led or internal signals)
+        // Display the LED output
         $display("LED output: %b", out_led);
 
         // Optionally, add more checks here
 
         $finish;
     end
-endmodule
+endmodule 
