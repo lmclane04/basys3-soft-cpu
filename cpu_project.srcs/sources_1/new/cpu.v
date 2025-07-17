@@ -1,7 +1,9 @@
 module cpu(
     input clk,
     input rst,
-    output [7:0] out_led
+    input [7:0] switches,      // Basys3 switches
+    output reg [7:0] led_out,  // Basys3 LEDs
+    output reg [7:0] display_out // Basys3 7-segment display (to be decoded)
 );
     reg [7:0] pc = 0;
     wire [7:0] instr;
@@ -44,7 +46,7 @@ module cpu(
     alu alu_inst(.a(rd1), .b(rd2), .op(opcode), .result(alu_result));
     ram data_ram(
         .clk(clk),
-        .we(ram_write_en),
+        .we(ram_write_en & (instr[5:0] != 8'hF0) & (instr[5:0] != 8'hF2)), // Don't write to RAM for LED or display-mapped address
         .addr({2'b00, instr[5:0]}),
         .din(rd1), // For STORE, write register value
         .dout(ram_dout)
@@ -65,12 +67,23 @@ module cpu(
         if (rst) begin
             pc <= 0;
             halted <= 0;
+            led_out <= 0;
+            display_out <= 0;
         end else if (!halted) begin
             if (is_load) begin
-                alu_result_reg <= ram_dout;
+                if (instr[5:0] == 8'hF1) begin
+                    alu_result_reg <= switches; // Memory-mapped switches
+                end else begin
+                    alu_result_reg <= ram_dout;
+                end
                 write_addr_reg <= instr[5:4];
             end else if (is_store) begin
-                // STORE handled by RAM write
+                if (instr[5:0] == 8'hF0) begin
+                    led_out <= rd1; // Memory-mapped LEDs
+                end
+                if (instr[5:0] == 8'hF2) begin
+                    display_out <= rd1; // Memory-mapped 7-segment display
+                end
                 write_addr_reg <= 0;
                 alu_result_reg <= 0;
             end else begin
@@ -89,6 +102,4 @@ module cpu(
             end
         end
     end
-
-    assign out_led = regs.regs[3]; // Show R3 result on LEDs
 endmodule
