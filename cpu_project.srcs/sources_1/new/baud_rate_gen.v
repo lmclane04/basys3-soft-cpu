@@ -13,7 +13,7 @@ module baud_rate_gen(
 	reg [7:0] count_16x;
 	reg [3:0] count_1x;
 
-	parameter BAUD_115200_DIV = 27; // 50M / (115200 * 16)
+	parameter BAUD_115200_DIV = 54; // 100M / (115200 * 16)
 
 	initial begin
 		count_16x = 0;
